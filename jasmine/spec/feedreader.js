@@ -6,8 +6,7 @@
 
 $(function () {
     /**
-     * a test suite just contains
-     * a related set of tests. This suite is all about the RSS
+     * A test suite just contains a related set of tests. This suite is all about the RSS
      * feeds definitions, the allFeeds variable in our application.
      */
     describe('RSS Feeds', function () {
@@ -52,7 +51,7 @@ $(function () {
                 // Test that name is defined on the feed entry
                 expect(feed.name).toBeDefined();
                 // Test that the name value is not empty
-                expect(feed.name.trim()).not.toBe('');
+                expect(feed.name.trim()).not.toEqual('');
             });
         });
     });
@@ -66,29 +65,18 @@ $(function () {
         // Test that when the page opens the menu is hidden by default
         it('is hidden by default', function () {
             // Test that class 'menu-header' exists
-            expect($('.menu-hidden')).toBeDefined();
-            expect($('.menu-hidden').length).toBeGreaterThan(0);
+            expect($('body').hasClass("menu-hidden")).toBe(true);
         });
 
 
-        it('shows the menu when clicked', function() {   
-            // Trigger click on the menu icon
-            $('.menu-icon-link').trigger('click');
-
-            slideMenuOrientation = parseInt($('.slide-menu').css('transform').split(',')[4].trim());
-            console.log(`Transform value: ${slideMenuOrientation}`);
-            expect(slideMenuOrientation).toBeGreaterThan(-1);
+        it('visibility changes when clicked', function () {
+            // Trigger click on the menu icon to open it
+            $('.menu-icon-link').click();
+            expect($('body').hasClass("menu-hidden")).toBe(false);
+            // Trigger click on the menu icon to close it
+            $('.menu-icon-link').click();
+            expect($('body').hasClass("menu-hidden")).toBe(true);
         });
-
-        it('hides the menu when clicked', function() {
-            // Trigger click on the menu icon
-            $('.menu-icon-link').trigger('click');
-
-            slideMenuOrientation = parseInt($('.slide-menu').css('transform').split(',')[4].trim());
-            console.log(`Transform value: ${slideMenuOrientation}`);
-            expect(slideMenuOrientation).not.toBeGreaterThan(0);
-        });
-
     });
 
 
@@ -179,12 +167,12 @@ $(function () {
         /**
          * Test that the values saved for the first feed & the second feed do not match
          */
-        it('DOM data for second feed not match DOM data for first feed', function () {
+        it('do not match previous selected feed', function () {
             // Test that feed name do not match
             expect(feedTwoName).not.toEqual(feedOneName);
 
             // Test that feed entries do not match
-            // using not.toEqual returned 'true' therefor not.toBe used instead
+            // using not.toEqual returned 'true' therefore not.toBe used instead
             expect(feedTwoEntries).not.toBe(feedOneEntries);
         });
     });
