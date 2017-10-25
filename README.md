@@ -1,7 +1,7 @@
 # Feed Reader Testing
 ## Introduction
 * This is Udacity Frontend Nanodegree "Feed Reader" project using Jasmine testing suite.
-* To execute the tests, you only need to open index.html or [click here](https://alia-adel.github.io/frontend-nanodegree-feedreader/)
+* To execute the tests, you only need to open index.html
 
 ### Test Suites/Cases
 * RSS Feeds
