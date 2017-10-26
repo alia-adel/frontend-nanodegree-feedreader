@@ -14,9 +14,7 @@
 * Initial Entries
     * loaded with at least one entry
 * New Feed Selection
-    * loads the first feed
-    * loads the second feed
-    * do not match previous selected feed
+    * do not match previous loaded feed
 
 ## Project Structure
 * `.\css\`

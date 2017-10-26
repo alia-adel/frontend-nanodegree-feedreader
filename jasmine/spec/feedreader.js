@@ -31,10 +31,10 @@ $(function () {
             expect(allFeeds).toBeDefined();
 
             allFeeds.forEach((feed) => {
-                // Test that url is defined on the feed entry
-                expect(feed.url).toBeDefined();
-                // Test that the url value is not empty
-                expect(feed.url.trim()).not.toEqual('');
+                // Test that url is defined & not empty on the feed entry
+                expect(feed.url).toBeTruthy();
+                expect(feed.url).toMatch(
+                    "(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])");
             });
         });
 
@@ -48,10 +48,8 @@ $(function () {
             expect(allFeeds).toBeDefined();
 
             allFeeds.forEach((feed) => {
-                // Test that name is defined on the feed entry
-                expect(feed.name).toBeDefined();
-                // Test that the name value is not empty
-                expect(feed.name.trim()).not.toEqual('');
+                // Test that name is defined & not empty on the feed entry
+                expect(feed.name).toBeTruthy();
             });
         });
     });
@@ -93,18 +91,9 @@ $(function () {
 
 
         it('loaded with at least one entry', function (done) {
-            // Test that allFeeds is defined
-            expect(allFeeds).toBeDefined();
-
-            // Test that allFeeds object has at least one entry
-            expect(allFeeds.length).toBeGreaterThan(0);
-
-            // Test that '.feed' element is defined
-            expect($('.feed')).toBeDefined();
-
             // Test that '.feed' element has at least one '.entry' element
-            expect($('.feed').find('.entry')).toBeDefined();
-            expect($('.feed').find('.entry').length).toBeGreaterThan(0);
+            expect($('.feed .entry')).toBeDefined();
+            expect($('.feed .entry').length).toBeGreaterThan(0);
 
             done();
         });
@@ -117,63 +106,38 @@ $(function () {
      * by the loadFeed function that the content actually changes.
      */
     describe('New Feed Selection', function () {
-        let feedOneName, feedTwoName, feedID = 0;
-        let feedOneEntries, feedTwoEntries;
+        let feedOneName, feedTwoName, feedOneEntries, feedTwoEntries;
 
-        beforeEach(function (done) {
+        beforeEach(done => {
             // before each test load a different feed
-            loadFeed(feedID, done);
-        });
-
-
-        /**
-         * Load the first feed & retrieve its
-         * name & data & save them in feedOneName & feedOneEntries objects
-         */
-        it('loads the first feed', function (done) {
-            // Test that allFeeds is defined
-            expect(allFeeds).toBeDefined();
-
-            // Test that allFeeds object has at least one entry
-            expect(allFeeds.length).toBeGreaterThan(0);
-
-            feedOneName = $('.header-title').html();
-            feedOneEntries = $('.feed').find('.entry');
-            // Increment the feed Id to get a new one in the next test
-            feedID++;
-
-            done();
-        });
-
-
-        /**
-         * Load the second feed & retrieve its
-         * name & data & save them in feedTwoName & feedTwoEntries objects
-         */
-        it('loads the second feed', function (done) {
-            // Test that allFeeds is defined
-            expect(allFeeds).toBeDefined();
-
-            // Test that allFeeds object has at least one entry
-            expect(allFeeds.length).toBeGreaterThan(1);
-
-            feedTwoName = $('.header-title').html();
-            feedTwoEntries = $('.feed').find('.entry');
-
-            done();
+            loadFeed(0, () => {
+                feedOneName = $('.header-title').html();
+                feedOneEntries = $('.feed').html();
+                loadFeed(1, () => {
+                    feedTwoName = $('.header-title').html();
+                    feedTwoEntries = $('.feed').html();
+                    done();
+                });
+            });
         });
 
 
         /**
          * Test that the values saved for the first feed & the second feed do not match
          */
-        it('do not match previous selected feed', function () {
-            // Test that feed name do not match
+        it('do not match previous loaded feed', function (done) {
+            expect(feedOneName).toBeDefined();
+            expect(feedTwoName).toBeDefined();
+            expect(feedOneEntries).toBeDefined();
+            expect(feedTwoEntries).toBeDefined();
+
+            // Test that feed names do not match
             expect(feedTwoName).not.toEqual(feedOneName);
 
-            // Test that feed entries do not match
-            // using not.toEqual returned 'true' therefore not.toBe used instead
-            expect(feedTwoEntries).not.toBe(feedOneEntries);
+            // Test that feed entries do not match            
+            expect(feedTwoEntries).not.toEqual(feedOneEntries);
+
+            done();
         });
     });
 }());
